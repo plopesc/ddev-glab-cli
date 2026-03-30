@@ -1,0 +1,5 @@
+#ddev-generated
+ARG GLAB_VERSION=1.90.0
+RUN curl -sLO "https://gitlab.com/gitlab-org/cli/-/releases/v${GLAB_VERSION}/downloads/glab_${GLAB_VERSION}_linux_amd64.deb" \
+    && dpkg -i "glab_${GLAB_VERSION}_linux_amd64.deb" \
+    && rm "glab_${GLAB_VERSION}_linux_amd64.deb"

@@ -1,6 +1,16 @@
 name: glab-cli
 
 project_files:
-  - docker-compose.glab-cli.yaml
+  - web-build/Dockerfile.glab-cli
 
 ddev_version_constraint: '>= v1.24.3'
+
+post_install_actions:
+  - |
+    #ddev-description: Environment variables
+    echo "You can define the following environment variables:"
+    echo " - GITLAB_HOST"
+    echo " - GITLAB_API_HOST"
+    echo " - GITLAB_TOKEN"
+    echo "or execute 'glab auth login'"
+
