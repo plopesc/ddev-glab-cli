@@ -40,6 +40,22 @@ ddev exec glab auth login
 
 The full documentation about GitLab CLI can be gound at the [GitLab CLI documentation page](https://docs.gitlab.com/cli/).
 
+## Customization
+
+### Custom GitLab CLI version
+
+By default, the add-on installs GitLab CLI version `1.90.0`. To use a different version, create a `.ddev/docker-compose.glab-cli.yaml` file with the desired version:
+
+```yaml
+services:
+  web:
+    build:
+      args:
+        GLAB_VERSION: "1.80.0"
+```
+
+Then run `ddev restart` to rebuild the container with the specified version.
+
 ## Credits
 
 **Contributed and maintained by [@plopesc](https://github.com/plopesc)**

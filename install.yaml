@@ -11,5 +11,5 @@ post_install_actions:
     echo "You can define the following environment variables:"
     echo " - GITLAB_HOST"
     echo " - GITLAB_TOKEN"
-    echo "or execute 'ddev exec glab auth login' to login into Gitlab CLI"
+    echo "or execute 'ddev exec glab auth login' to login into Gitlab CLI."
 
