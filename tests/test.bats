@@ -69,9 +69,9 @@ teardown() {
 @test "install with custom version" {
   set -eu -o pipefail
   echo "# ddev add-on get ${DIR} with custom GLAB_VERSION in $(pwd)" >&3
+  printf "services:\n  web:\n    build:\n      args:\n        GLAB_VERSION: \"1.80.0\"\n" > .ddev/docker-compose.glab-cli.yaml
   run ddev add-on get "${DIR}"
   assert_success
-  sed -i 's/GLAB_VERSION: "1.90.0"/GLAB_VERSION: "1.80.0"/' .ddev/docker-compose.glab-cli.yaml
   run ddev restart -y
   assert_success
   run ddev exec "glab --version"

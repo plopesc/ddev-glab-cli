@@ -2,7 +2,6 @@ name: glab-cli
 
 project_files:
   - web-build/Dockerfile.glab-cli
-  - docker-compose.glab-cli.yaml
 
 ddev_version_constraint: '>= v1.24.3'
 

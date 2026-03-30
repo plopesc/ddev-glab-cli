@@ -44,7 +44,7 @@ The full documentation about GitLab CLI can be gound at the [GitLab CLI document
 
 ### Custom GitLab CLI version
 
-By default, the add-on installs GitLab CLI version `1.90.0`. To use a different version, edit `.ddev/docker-compose.glab-cli.yaml` and change the `GLAB_VERSION` value:
+By default, the add-on installs GitLab CLI version `1.90.0`. To use a different version, create a `.ddev/docker-compose.glab-cli.yaml` file with the desired version:
 
 ```yaml
 services:
