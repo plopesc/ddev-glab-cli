@@ -39,9 +39,10 @@ setup() {
 }
 
 health_checks() {
+  LATEST_VERSION=$(curl -sL "https://gitlab.com/api/v4/projects/gitlab-org%2Fcli/releases/permalink/latest" | grep -o '"tag_name":"[^"]*"' | sed 's/"tag_name":"v\([^"]*\)"/\1/')
   run ddev exec "glab --version"
   assert_success
-  assert_output --partial "1.90.0"
+  assert_output --partial "${LATEST_VERSION}"
 }
 
 teardown() {
