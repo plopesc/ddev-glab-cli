@@ -39,9 +39,9 @@ setup() {
 }
 
 health_checks() {
-  # Verify glab-cli runs and reports a version
   run ddev exec "glab --version"
   assert_success
+  assert_output --partial "1.90.0"
 }
 
 teardown() {
@@ -64,6 +64,19 @@ teardown() {
   run ddev restart -y
   assert_success
   health_checks
+}
+
+@test "install with custom version" {
+  set -eu -o pipefail
+  echo "# ddev add-on get ${DIR} with custom GLAB_VERSION in $(pwd)" >&3
+  printf "web_build_args:\n  GLAB_VERSION: \"1.80.0\"\n" > .ddev/config.glab-version.yaml
+  run ddev add-on get "${DIR}"
+  assert_success
+  run ddev restart -y
+  assert_success
+  run ddev exec "glab --version"
+  assert_success
+  assert_output --partial "1.80.0"
 }
 
 # bats test_tags=release
