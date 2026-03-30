@@ -10,7 +10,6 @@ post_install_actions:
     #ddev-description: Environment variables
     echo "You can define the following environment variables:"
     echo " - GITLAB_HOST"
-    echo " - GITLAB_API_HOST"
     echo " - GITLAB_TOKEN"
-    echo "or execute 'glab auth login'"
+    echo "or execute 'ddev exec glab auth login' to login into Gitlab CLI"
 

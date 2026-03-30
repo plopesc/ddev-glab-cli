@@ -7,7 +7,7 @@
 
 ## Overview
 
-This add-on integrates Glab Cli into your [DDEV](https://ddev.com/) project.
+This add-on integrates GitLab Cli (glab) into your [DDEV](https://ddev.com/) project.
 
 ## Installation
 
@@ -18,30 +18,27 @@ ddev restart
 
 After installation, make sure to commit the `.ddev` directory to version control.
 
-## Usage
+## Authentication
 
-| Command | Description |
-| ------- | ----------- |
-| `ddev describe` | View service status and used ports for Glab Cli |
-| `ddev logs -s glab-cli` | Check Glab Cli logs |
+For persistent login, the following environment variables need to be defined:
+* GITLAB_HOST
+* GITLAB_TOKEN
 
-## Advanced Customization
+The full list of environment variables can be found at [CLI documentation](https://docs.gitlab.com/cli/#environment-variables).
 
-To change the Docker image:
-
-```bash
-ddev dotenv set .ddev/.env.glab-cli --glab-cli-docker-image="ddev/ddev-utilities:latest"
-ddev add-on get plopesc/ddev-glab-cli
-ddev restart
+For other ways to authenticate, the following command can be executed:
+```sh
+ddev exec glab auth login
 ```
 
-Make sure to commit the `.ddev/.env.glab-cli` file to version control.
+## Usage
 
-All customization options (use with caution):
+| Command                                     | Description                              |
+|---------------------------------------------|------------------------------------------|
+| `ddev exec glab --version`                    | Check the installed version              |
+| `ddev exec glab --help`                       | View available commands                  |
 
-| Variable | Flag | Default |
-| -------- | ---- | ------- |
-| `GLAB_CLI_DOCKER_IMAGE` | `--glab-cli-docker-image` | `ddev/ddev-utilities:latest` |
+The full documentation about GitLab CLI can be gound at the [GitLab CLI documentation page](https://docs.gitlab.com/cli/).
 
 ## Credits
 
