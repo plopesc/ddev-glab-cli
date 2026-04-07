@@ -3,6 +3,7 @@ ARG GLAB_VERSION=latest
 RUN if [ "${GLAB_VERSION}" = "latest" ]; then \
       GLAB_VERSION=$(curl -sL "https://gitlab.com/api/v4/projects/gitlab-org%2Fcli/releases/permalink/latest" | grep -o '"tag_name":"[^"]*"' | sed 's/"tag_name":"v\([^"]*\)"/\1/'); \
     fi \
-    && curl -sLO "https://gitlab.com/gitlab-org/cli/-/releases/v${GLAB_VERSION}/downloads/glab_${GLAB_VERSION}_linux_amd64.deb" \
-    && dpkg -i "glab_${GLAB_VERSION}_linux_amd64.deb" \
-    && rm "glab_${GLAB_VERSION}_linux_amd64.deb"
+    && ARCH=$(dpkg --print-architecture) \
+    && curl -sLO "https://gitlab.com/gitlab-org/cli/-/releases/v${GLAB_VERSION}/downloads/glab_${GLAB_VERSION}_linux_${ARCH}.deb" \
+    && dpkg -i "glab_${GLAB_VERSION}_linux_${ARCH}.deb" \
+    && rm "glab_${GLAB_VERSION}_linux_${ARCH}.deb"
