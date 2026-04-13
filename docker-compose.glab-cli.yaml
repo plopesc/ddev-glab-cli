@@ -1,6 +1,6 @@
 #ddev-generated
-# Mount glab host configuration into the web container so that `glab`
-# inside the container shares the same global.
+# Mount glab host configuration files into the web container so that `glab`
+# inside the container shares the same authentication and aliases.
 # The pre-start hook in config.glab-cli.yaml ensures all host paths exist
 # as the correct type (file vs. directory) before Docker attempts to bind-mount them.
 # Without that hook, Docker would create a directory at any missing file path,
@@ -8,4 +8,5 @@
 services:
   web:
     volumes:
-      - "${HOME}/.config/glab-cli:${HOME}/.config/glab-cli:ro"
+      - "${HOME}/.config/glab-cli/config.yml:${HOME}/.config/glab-cli/config.yml:ro"
+      - "${HOME}/.config/glab-cli/aliases.yml:${HOME}/.config/glab-cli/aliases.yml:ro"
