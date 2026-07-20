@@ -1,6 +1,8 @@
 #ddev-generated
-# Mount glab host configuration files into the web container so that `glab`
-# inside the container shares the same authentication and aliases.
+# Mount glab host configuration files read-only into a seed directory. The
+# post-start hook in config.glab-cli.yaml copies them into glab's actual
+# config directory, so the container can drift from the host between
+# restarts while still picking up host-side changes on every `ddev start`.
 # The pre-start hook in config.glab-cli.yaml ensures all host paths exist
 # as the correct type (file vs. directory) before Docker attempts to bind-mount them.
 # Without that hook, Docker would create a directory at any missing file path,
@@ -8,5 +10,5 @@
 services:
   web:
     volumes:
-      - "${HOME}/.config/glab-cli/config.yml:${HOME}/.config/glab-cli/config.yml:ro"
-      - "${HOME}/.config/glab-cli/aliases.yml:${HOME}/.config/glab-cli/aliases.yml:ro"
+      - "${HOME}/.config/glab-cli/config.yml:${HOME}/.cred-seed/glab/config.yml:ro"
+      - "${HOME}/.config/glab-cli/aliases.yml:${HOME}/.cred-seed/glab/aliases.yml:ro"

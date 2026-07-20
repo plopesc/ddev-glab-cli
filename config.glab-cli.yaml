@@ -5,3 +5,16 @@ hooks:
     # correct type (file vs directory).  If a file does not exist, Docker would
     # create a directory at that path instead, breaking the mount.
     - exec-host: "mkdir -p ~/.config/glab-cli && touch ~/.config/glab-cli/config.yml ~/.config/glab-cli/aliases.yml && chmod 600 ~/.config/glab-cli/config.yml ~/.config/glab-cli/aliases.yml"
+  post-start:
+    # Copy the read-only host seed into glab's writable runtime config
+    # directory on every start. Host config is authoritative, so
+    # container-only drift is discarded and replaced with the host's copy
+    # each time the project starts.
+    - exec: |
+        set -eu
+        seed_dir="${HOME}/.cred-seed/glab"
+        target_dir="${HOME}/.config/glab-cli"
+        mkdir -p "${target_dir}"
+        cp "${seed_dir}/config.yml" "${target_dir}/config.yml"
+        cp "${seed_dir}/aliases.yml" "${target_dir}/aliases.yml"
+        chmod 600 "${target_dir}/config.yml" "${target_dir}/aliases.yml"
