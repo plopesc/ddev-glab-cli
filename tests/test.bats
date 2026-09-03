@@ -80,6 +80,33 @@ teardown() {
   assert_output --partial "1.80.0"
 }
 
+@test "seeds host glab config into the container" {
+  set -eu -o pipefail
+  echo "# ddev add-on get ${DIR} and check the glab config seed in $(pwd)" >&3
+  run ddev add-on get "${DIR}"
+  assert_success
+  run ddev restart -y
+  assert_success
+
+  # The pre-start hook creates the host-side files the mount depends on.
+  assert_file_exist "${HOME}/.config/glab-cli/config.yml"
+  assert_file_exist "${HOME}/.config/glab-cli/aliases.yml"
+
+  # The seed must land on a fixed container path. Using ${HOME} as the mount
+  # target would break on macOS, where the host home (/Users/<user>) differs
+  # from the container home (/home/<user>).
+  run ddev exec "test -f /mnt/ddev-glab-cli-seed/config.yml"
+  assert_success
+  run ddev exec "test -f /mnt/ddev-glab-cli-seed/aliases.yml"
+  assert_success
+
+  # And the post-start hook must have copied it where glab actually reads it.
+  run ddev exec 'test -f "${HOME}/.config/glab-cli/config.yml"'
+  assert_success
+  run ddev exec 'cmp -s /mnt/ddev-glab-cli-seed/config.yml "${HOME}/.config/glab-cli/config.yml"'
+  assert_success
+}
+
 # bats test_tags=release
 @test "install from release" {
   set -eu -o pipefail

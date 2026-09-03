@@ -10,11 +10,22 @@ hooks:
     # directory on every start. Host config is authoritative, so
     # container-only drift is discarded and replaced with the host's copy
     # each time the project starts.
+    #
+    # The seed directory is the fixed mount point declared in
+    # docker-compose.glab-cli.yaml; it deliberately does not use ${HOME},
+    # which differs between host and container on macOS. See that file.
     - exec: |
         set -eu
-        seed_dir="${HOME}/.cred-seed/glab"
+        seed_dir="/mnt/ddev-glab-cli-seed"
         target_dir="${HOME}/.config/glab-cli"
+        if [ ! -d "${seed_dir}" ]; then
+          echo "glab-cli: no host config mounted at ${seed_dir}; skipping config sync." >&2
+          exit 0
+        fi
         mkdir -p "${target_dir}"
-        cp "${seed_dir}/config.yml" "${target_dir}/config.yml"
-        cp "${seed_dir}/aliases.yml" "${target_dir}/aliases.yml"
-        chmod 600 "${target_dir}/config.yml" "${target_dir}/aliases.yml"
+        for file in config.yml aliases.yml; do
+          if [ -f "${seed_dir}/${file}" ]; then
+            cp "${seed_dir}/${file}" "${target_dir}/${file}"
+            chmod 600 "${target_dir}/${file}"
+          fi
+        done
