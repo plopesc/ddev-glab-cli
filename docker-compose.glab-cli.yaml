@@ -3,6 +3,14 @@
 # post-start hook in config.glab-cli.yaml copies them into glab's actual
 # config directory, so the container can drift from the host between
 # restarts while still picking up host-side changes on every `ddev start`.
+#
+# The container-side target is a fixed absolute path, NOT `${HOME}`. Docker
+# Compose interpolates `${HOME}` from the host environment on both sides of a
+# volume mapping, and the host home directory does not match the container's
+# on every platform: macOS hosts use `/Users/<user>` while the web container
+# always uses `/home/<user>`. Using `${HOME}` as the target would therefore
+# mount the seed somewhere the post-start hook never looks.
+#
 # The pre-start hook in config.glab-cli.yaml ensures all host paths exist
 # as the correct type (file vs. directory) before Docker attempts to bind-mount them.
 # Without that hook, Docker would create a directory at any missing file path,
@@ -10,5 +18,5 @@
 services:
   web:
     volumes:
-      - "${HOME}/.config/glab-cli/config.yml:${HOME}/.cred-seed/glab/config.yml:ro"
-      - "${HOME}/.config/glab-cli/aliases.yml:${HOME}/.cred-seed/glab/aliases.yml:ro"
+      - "${HOME}/.config/glab-cli/config.yml:/mnt/ddev-glab-cli-seed/config.yml:ro"
+      - "${HOME}/.config/glab-cli/aliases.yml:/mnt/ddev-glab-cli-seed/aliases.yml:ro"
